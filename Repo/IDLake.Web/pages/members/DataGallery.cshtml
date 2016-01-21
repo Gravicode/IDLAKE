@@ -1,0 +1,54 @@
+﻿@{
+    Page.Title = "IDLake - Galleri Data";
+    Layout = "/pages/shared/_main.cshtml";
+}
+<div data-role="page" id="mainpage">
+    <div data-role="header">
+        <div style="display:none;" id="userid">@System.Web.HttpContext.Current.User.Identity.Name</div>
+        <a href="~/pages/members/front/" class="ui-btn ui-icon-home ui-btn-icon-left">Home</a>
+        <h1>Indonesia Data Lake - Galleri Data</h1>
+        <a href="~/pages/members/search" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Silakan pilih schema data yang diinginkan.</h3>
+        @{ 
+            var tipe = Request.QueryString["tipe"];
+            var userid = System.Web.HttpContext.Current.User.Identity.Name;
+            var db = new IDLake.Core.SchemaDb();
+            var datas = from c in db.GetAllData<IDLake.Entities.SchemaEntity>()
+                        where c.CreatedBy == userid
+                        orderby c.GroupName ascending
+                        select c;
+            var GrpSel = "";
+        }
+        <ul id="schemalist" data-role="listview">
+            @foreach (var item in datas)
+            {
+                if (GrpSel != item.GroupName)
+                {
+                    <li data-role="list-divider">@item.GroupName</li>
+                    GrpSel = item.GroupName;
+                }
+            <li>
+            @if (tipe == "api")
+            {
+                <a href="~/pages/members/DetailSchema/?fid=@item.Id">@item.SchemaName</a>
+            }
+            else
+            {
+                <a href="~/pages/members/ManageData/?schemaid=@item.Id">@item.SchemaName</a>
+            }
+            </li>
+
+            }
+        </ul>
+    </div>
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+  
+
+</div>

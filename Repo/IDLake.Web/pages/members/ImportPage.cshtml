@@ -1,0 +1,157 @@
+﻿@{
+    Page.Title = "IDLake - Import Data";
+    Layout = "/pages/shared/_main.cshtml";
+}
+
+<div data-role="page" id="importpage">
+    <div data-role="header">
+        <div style="display:none;" id="userid">@System.Web.HttpContext.Current.User.Identity.Name</div>
+       
+        <a href="~/pages/members/migration/" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-l">Back</a>
+
+         <h1>Indonesia Data Lake - Import Data ke Sistem</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Silakan pilih schema data yang ingin di import dan kemudian pilih filenya.</h3>
+        <div>
+            <div class="ui-field-contain">
+                <label for="SchemaName" class="select">Pilih Schema:</label>
+                <select name="SchemaName" id="SchemaName" data-native-menu="true"></select>
+            </div>
+            <div class="ui-field-contain">
+                <span id="deskripsi"></span>
+            </div>
+            <div class="ui-field-contain">
+                <label for="file1" class="select">Upload File (csv/json/xml) :</label>
+                <div class="ui-input-text ui-shadow-inset ui-corner-all ui-btn-shadow ui-body-c">
+                    <input type="file" id="file1" name="file1" class="ui-input-text ui-body-c">
+                </div>
+            </div>
+
+            <div class="ui-field-contain">
+                <button id="btnImport" class="ui-btn">Import Data</button>
+                <button id="btnClear" class="ui-btn">Clear</button>
+            </div>
+        </div>
+        <div id="progress-main" style="display:none;">
+            <h3>Data sedang di import, harap menunggu.</h3>
+            <img id="ImgProgress" alt="loading.." src="~/styles/images/loading.gif" />
+        </div>
+    </div>
+
+    <div data-role="footer" >
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+            var schemas;
+            // Declare a proxy to reference the custom Hub name.
+
+            var WebDataHub = $.connection.WebHub;
+
+            // Create a function that the hub can call to broadcast messages.
+
+            WebDataHub.client.Notify = function (hasil) {
+                alert(hasil);
+                //$('#alertdiv').empty();
+                //$('#alertdiv').append('<p>' + hasil + '</p>');
+
+            };
+
+            // Start the connection.
+
+            $.connection.hub.start().done(function () {
+
+                var username = $('#userid').html();
+                WebDataHub.server.GetSchemas(username).done(function (data) {
+                    schemas = data;
+                    var options = $("#SchemaName");
+                    $(data).each(function (index, result) {
+                        options.append($("<option />").val(result.Id).text(result.SchemaName));
+                    });
+                });
+
+                $("#SchemaName").change(function () {
+                    var selId = $(this).val();
+                    $(schemas).each(function (index, result) {
+                        if (result.Id == selId) {
+                            $('#deskripsi').html(result.Description);
+                        }
+                    });
+                }).change();
+
+                $('#btnClear').click(function () {
+                    $("#file1").val('');
+                });
+
+                $('#btnImport').click(function () {
+
+
+                    var uploadSucceed = true;
+                    var ErrMsg = '';
+                    var SuccessMsg = '';
+
+                    var fileUpload = $('#file1').get(0);
+                    var files = fileUpload.files;
+                    var test = new FormData();
+
+                    if (files.length <= 0) {
+                        alert('please select photo to upload');
+                        return;
+                    }
+                    var selId = $('#SchemaName').val();
+                    var SchemaType = -1;
+                    $(schemas).each(function (index, result) {
+                        if (result.Id == selId) {
+                            SchemaType = result.SchemaType;
+                        }
+                    });
+
+                    $('#progress-main').show();
+
+                    test.append("UserName", $('#userid').html());
+                    test.append("SchemaName", $('#SchemaName option:selected').text());
+                    test.append("SchemaType",SchemaType);
+
+
+                    for (var i = 0; i < files.length; i++) {
+                        test.append(files[i].name, files[i]);
+                    }
+                    $.ajax({
+                        url: "/handlers/importdata.ashx",
+                        type: "POST",
+                        contentType: false,
+                        processData: false,
+                        data: test,
+                        // dataType: "json",
+                        success: function (result) {
+                            alert('Upload sukses :' + result.Result);
+                            //$('#progress-main').children('h3').html('Upload sukses.');
+                            $('#progress-main').hide();
+                        },
+                        error: function (err) {
+                            uploadSucceed = false;
+                            ErrMsg += err.Comment;
+                            alert('upload gagal');
+                            //$('#progress-main').children('h3').html('Upload gagal.');
+                            $('#progress-main').hide();
+                        }
+                    });
+
+
+
+                });
+
+
+            });
+
+        });
+
+    </script>
+
+</div>

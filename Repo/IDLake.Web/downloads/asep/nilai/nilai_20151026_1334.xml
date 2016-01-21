@@ -1,0 +1,20 @@
+<nilai>
+  <row>
+    <nik>123</nik>
+    <nama>asep</nama>
+    <kelas>ipa</kelas>
+    <_id>1</_id>
+  </row>
+  <row>
+    <nik>213</nik>
+    <nama>asep</nama>
+    <kelas>ips</kelas>
+    <_id>3</_id>
+  </row>
+  <row>
+    <nik>234</nik>
+    <nama>udu</nama>
+    <kelas>ips</kelas>
+    <_id>2</_id>
+  </row>
+</nilai>

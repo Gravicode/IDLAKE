@@ -1,0 +1,217 @@
+﻿@{
+    Page.Title = "IDLake - Design Schema";
+    Layout = "/pages/shared/_main.cshtml";
+}
+
+<div data-role="page" id="designschema">
+    <div data-role="header">
+        <div style="display:none;" id="userid">@System.Web.HttpContext.Current.User.Identity.Name</div>
+        <a href="~/pages/members/SelectSchema/" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-l">Back</a>
+        <h1>Indonesia Data Lake - Design Schema</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Silakan desain schema dan isi field dibawah ini.</h3>
+        <div>
+            <div class="ui-field-contain">
+                <label for="SchemaType" class="select">Pilih Jenis Database:</label>
+                <select name="SchemaType" id="SchemaType" data-native-menu="false">
+                    <option value="0">Realtime Data (Sangat cepat berubah)</option>
+                    <option value="1">Relational Data (Berelasi, kadang diubah)</option>
+                    <option value="2">Historikal Data (Tidak berubah, record banyak)</option>
+                </select>
+            </div>
+            <div class="ui-field-contain">
+                <label for="GroupName" class="select">Pilih Group Data:</label>
+                <select name="GroupName" id="GroupName" data-native-menu="false">
+                    <option value="0">Hukum dan Hak Asasi Manusia Indonesia</option>
+                    <option value="1">Keuangan Indonesia</option>
+                    <option value="2">Energi dan Sumber Daya Mineral Indonesia</option>
+                    <option value="3">Perindustrian Indonesia</option>
+                    <option value="4">Perdagangan Indonesia</option>
+                    <option value="5">Pertanian Indonesia</option>
+                    <option value="6">Lingkungan Hidup dan Kehutanan Indonesia</option>
+                    <option value="7">Perhubungan Indonesia</option>
+                    <option value="8">Kelautan dan Perikanan Indonesia</option>
+                    <option value="9">Ketenagakerjaan Indonesia</option>
+                    <option value="10">Pekerjaan Umum dan Perumahan Rakyat Indonesia</option>
+                    <option value="11">Kesehatan Indonesia</option>
+                    <option value="12">Pendidikan dan Kebudayaan Indonesia</option>
+                    <option value="13">Riset, Teknologi dan Pendidikan Tinggi Indonesia</option>
+                    <option value="14">Sosial Indonesia</option>
+                    <option value="15">Agama Indonesia</option>
+                    <option value="16">Komunikasi dan Informatika Indonesia</option>
+                    <option value="17">Desa, Pembangunan Daerah Tertinggal, dan Transmigrasi Indonesia</option>
+                    <option value="18">Agraria dan Tata Ruang Indonesia</option>
+                    <option value="19">Lainnya..</option>
+                </select>
+            </div>
+            <div class="ui-field-contain">
+                <label for="SchemaName">Nama Schema:</label>
+                <input type="text" name="SchemaName" id="SchemaName">
+            </div>
+            <div class="ui-field-contain">
+                <label for="Description">Deskripsi:</label>
+                <input type="text" name="Description" id="Description">
+            </div>
+            <div class="ui-field-contain">
+                <label for="AccessType" class="select">Akses Data:</label>
+                <select name="AccessType" id="AccessType" data-native-menu="false">
+                    <option value="0">Publik - untuk umum</option>
+                    <option value="1">Private - kalangan tertentu</option>
+                </select>
+            </div>
+            <table data-role="table" data-mode="columntoggle" class="ui-responsive" id="TbFields">
+                <thead>
+                    <tr>
+                        <th data-priority="1">Nama Field</th>
+                        <th data-priority="2">Tipe</th>
+                        <th data-priority="3">Mandatory</th>
+                        <th data-priority="4">Validasi (regex)</th>
+                        <th data-priority="5">Keterangan</th>
+                        <th data-priority="5">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="field_row">
+                        <td><input type="text" name="field_name"></td>
+                        <td>
+                            <select name="field_type" data-role="none" data-native-menu="true">
+                                <option value="string">Teks</option>
+                                <option value="integer">Angka Bulat</option>
+                                <option value="double">Angka Desimal</option>
+                                <option value="datetime">Tanggal</option>
+                                <option value="boolean">Ya/Tidak</option>
+                                <option value="character">Karakter</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="field_mandatory" data-role="none" data-native-menu="true">
+                                <option value="true">Tidak Wajib Isi</option>
+                                <option value="false">Wajib Isi</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="field_regex">
+                        </td>
+                        <td>
+                            <input type="text" name="field_desc">
+                        </td>
+                        <td>
+                            <button name="btnHapus" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext"></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button href="#" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left" id="btnTambah" >Tambah Field</button>
+            <div class="ui-field-contain">
+                <button id="btnSubmit" class="ui-btn">Submit Schema</button>
+                <button id="btnClear" class="ui-btn">Clear</button>
+            </div>
+        </div>
+        <div id="progress-main" style="display:none;">
+            <h3>Schema sedang di proses, harap menunggu.</h3>
+            <img id="ImgProgress" alt="loading.." src="~/styles/images/loading.gif" />
+        </div>
+    </div>
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+    <script type="text/javascript" src="~/scripts/Lists.js"></script>
+    <script type="text/javascript">
+
+
+        // Declare a proxy to reference the custom Hub name.
+
+        var WebDataHub = $.connection.WebHub;
+
+        // Create a function that the hub can call to broadcast messages.
+
+        WebDataHub.client.Notify = function (hasil) {
+            alert(hasil);
+            //$('#alertdiv').empty();
+            //$('#alertdiv').append('<p>' + hasil + '</p>');
+
+        };
+
+        // Start the connection.
+
+        $.connection.hub.start().done(function () {
+
+
+            $('#btnClear').click(function () {
+                $('#SchemaName').val('');
+                $('#Description').val('');
+
+            });
+
+            $('#btnTambah').click(function () {
+                $('#TbFields tbody>tr:last').clone(false).insertAfter('#TbFields tbody>tr:last');
+
+                //assign delete row method
+                $("button[name='btnHapus']").click(function () {
+                    var rowCount = $('#TbFields tr').length;
+                    if (rowCount > 2) {
+                        $(this).parent().parent().remove();
+                    }
+                });
+
+                return false;
+            });
+
+            $('#btnSubmit').click(function () {
+
+                var data =  new Array();
+                //foreach - new item
+
+                var IDField = (function () {
+                    function IDField() {
+                    }
+                    return IDField;
+                })();
+
+                var SchemaEntity = (function () {
+                    function SchemaEntity() {
+                    }
+                    return SchemaEntity;
+                })();
+
+                var newSchema = new SchemaEntity();
+
+                newSchema.UserName =  $('#userid').html();
+                newSchema.SchemaType = $('#SchemaType').val();
+                newSchema.Description = $('#Description').val();
+                newSchema.AccessType = $('#AccessType').val();
+                newSchema.SchemaName = $('#SchemaName').val();
+                newSchema.GroupName =  $('#GroupName option:selected').text();
+                $("tr.field_row").each(function () {
+                    $this = $(this);
+                    var item = new IDField();
+                    item.field_mandatory =  $this.find("select[name='field_mandatory']").val();
+                    item.field_name = $this.find("input[name='field_name']").val();
+                    item.field_type = $this.find("select[name='field_type']").val();
+                    item.field_regex =  $this.find("input[name='field_regex']").val();
+                    item.field_description = $this.find("input[name='field_desc']").val();
+                    data.push(item);
+                    
+                });
+                //send to server
+                WebDataHub.server.DesignSchema(newSchema, data).done(
+                        function (e) {
+                            if (e.Result) {
+                                alert('Design schema saved.');
+                            }
+                        });
+            });
+
+
+        });
+
+   
+
+    </script>
+
+</div>

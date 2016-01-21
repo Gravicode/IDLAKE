@@ -1,0 +1,23 @@
+<Pabrik>
+  <row>
+    <_id>1</_id>
+    <No>1</No>
+    <Pabrik>Pabrik 001</Pabrik>
+    <Lokasi>L001</Lokasi>
+    <Alamat>Bogor</Alamat>
+  </row>
+  <row>
+    <_id>2</_id>
+    <No>1</No>
+    <Pabrik>Pabrik 001</Pabrik>
+    <Lokasi>L001</Lokasi>
+    <Alamat>Bogor</Alamat>
+  </row>
+  <row>
+    <_id>3</_id>
+    <No>1</No>
+    <Pabrik>Pabrik 001</Pabrik>
+    <Lokasi>L001</Lokasi>
+    <Alamat>Bogor</Alamat>
+  </row>
+</Pabrik>

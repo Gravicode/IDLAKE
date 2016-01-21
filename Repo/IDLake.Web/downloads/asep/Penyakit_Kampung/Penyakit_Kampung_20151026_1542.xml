@@ -1,0 +1,16 @@
+<Penyakit_Kampung>
+  <row>
+    <Penyakit>buduk</Penyakit>
+    <Nama>budukwati</Nama>
+    <Diagnosis>kulit berakar</Diagnosis>
+    <Asal>ciawi</Asal>
+    <_id>2</_id>
+  </row>
+  <row>
+    <Penyakit>lepra</Penyakit>
+    <Nama>lepratikus</Nama>
+    <Diagnosis>kejang2</Diagnosis>
+    <Asal>bogor</Asal>
+    <_id>1</_id>
+  </row>
+</Penyakit_Kampung>

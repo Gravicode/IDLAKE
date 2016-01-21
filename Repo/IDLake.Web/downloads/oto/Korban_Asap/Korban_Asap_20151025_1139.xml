@@ -1,0 +1,16 @@
+<Korban_Asap>
+  <row>
+    <KTP>4324.43435.</KTP>
+    <Nama>Otto</Nama>
+    <Lokasi>Riau</Lokasi>
+    <Kerugian>2345436546</Kerugian>
+    <_id>2</_id>
+  </row>
+  <row>
+    <KTP>12.34243256.</KTP>
+    <Nama>Asep</Nama>
+    <Lokasi>Pekan baru</Lokasi>
+    <Kerugian>12000000</Kerugian>
+    <_id>1</_id>
+  </row>
+</Korban_Asap>

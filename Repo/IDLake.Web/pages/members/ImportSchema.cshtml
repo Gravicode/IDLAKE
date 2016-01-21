@@ -1,0 +1,176 @@
+﻿@{
+    Page.Title = "IDLake - Import Schema";
+    Layout = "/pages/shared/_main.cshtml";
+}
+
+<div data-role="page" id="importschema">
+    <div data-role="header">
+        <div style="display:none;" id="userid">@System.Web.HttpContext.Current.User.Identity.Name</div>
+        <a href="~/pages/members/SelectSchema/" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-l">Back</a>
+        <h1>Indonesia Data Lake - Import Schema</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Silakan pilih tipe data schema dan isi field dibawah ini.</h3>
+        <div>
+            <div class="ui-field-contain">
+                <label for="SchemaType" class="select">Pilih Jenis Database:</label>
+                <select name="SchemaType" id="SchemaType" data-native-menu="false">
+                    <option value="0">Realtime Data (Sangat cepat berubah)</option>
+                    <option value="1">Relational Data (Berelasi, kadang diubah)</option>
+                    <option value="2">Historikal Data (Tidak berubah, record banyak)</option>
+                </select>
+            </div>
+            <div class="ui-field-contain">
+                <label for="GroupName" class="select">Pilih Group Data:</label>
+                <select name="GroupName" id="GroupName" data-native-menu="false">
+                    <option value="0">Hukum dan Hak Asasi Manusia Indonesia</option>
+                    <option value="1">Keuangan Indonesia</option>
+                    <option value="2">Energi dan Sumber Daya Mineral Indonesia</option>
+                    <option value="3">Perindustrian Indonesia</option>
+                    <option value="4">Perdagangan Indonesia</option>
+                    <option value="5">Pertanian Indonesia</option>
+                    <option value="6">Lingkungan Hidup dan Kehutanan Indonesia</option>
+                    <option value="7">Perhubungan Indonesia</option>
+                    <option value="8">Kelautan dan Perikanan Indonesia</option>
+                    <option value="9">Ketenagakerjaan Indonesia</option>
+                    <option value="10">Pekerjaan Umum dan Perumahan Rakyat Indonesia</option>
+                    <option value="11">Kesehatan Indonesia</option>
+                    <option value="12">Pendidikan dan Kebudayaan Indonesia</option>
+                    <option value="13">Riset, Teknologi dan Pendidikan Tinggi Indonesia</option>
+                    <option value="14">Sosial Indonesia</option>
+                    <option value="15">Agama Indonesia</option>
+                    <option value="16">Komunikasi dan Informatika Indonesia</option>
+                    <option value="17">Desa, Pembangunan Daerah Tertinggal, dan Transmigrasi Indonesia</option>
+                    <option value="18">Agraria dan Tata Ruang Indonesia</option>
+                    <option value="19">Lainnya..</option>
+                </select>
+            </div>
+            <div class="ui-field-contain">
+                <label for="SchemaName">Nama Schema:</label>
+                <input type="text" name="SchemaName" id="SchemaName">
+            </div>
+            <div class="ui-field-contain">
+                <label for="Description">Deskripsi:</label>
+                <input type="text" name="Description" id="Description">
+            </div>
+            <div class="ui-field-contain">
+                <label for="AccessType" class="select">Akses Data:</label>
+                <select name="AccessType" id="AccessType" data-native-menu="false">
+                    <option value="0">Publik - untuk umum</option>
+                    <option value="1">Private - kalangan tertentu</option>
+                </select>
+            </div>
+            <div class="ui-field-contain">
+                <label for="fileupload1" class="select">Upload File (csv/json/xml) :</label>
+                <div class="ui-input-text ui-shadow-inset ui-corner-all ui-btn-shadow ui-body-c">
+                    <input type="file" id="file1" name="file1" class="ui-input-text ui-body-c">
+                </div>
+            </div>
+
+            <div class="ui-field-contain">
+                <button id="btnImport" class="ui-btn">Import Schema</button>
+                <button id="btnClear" class="ui-btn">Clear</button>
+            </div>
+        </div>
+        <div id="progress-main" style="display:none;">
+            <h3>Schema sedang di proses, harap menunggu.</h3>
+            <img id="ImgProgress" alt="loading.." src="~/styles/images/loading.gif" />
+        </div>
+    </div>
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+    <script type="text/javascript">
+
+    $(function () {
+
+        // Declare a proxy to reference the custom Hub name.
+
+        var WebDataHub = $.connection.WebHub;
+
+        // Create a function that the hub can call to broadcast messages.
+
+        WebDataHub.client.Notify = function (hasil) {
+            alert(hasil);
+            //$('#alertdiv').empty();
+            //$('#alertdiv').append('<p>' + hasil + '</p>');
+
+        };
+
+        // Start the connection.
+
+        $.connection.hub.start().done(function () {
+
+
+            $('#btnClear').click(function () {
+                $('#SchemaName').val('');
+                $('#Description').val('');
+                $("#file1").val('');
+            });
+
+            $('#btnImport').click(function () {
+
+
+                var uploadSucceed = true;
+                var ErrMsg = '';
+                var SuccessMsg = '';
+
+                var fileUpload = $('#file1').get(0);
+                var files = fileUpload.files;
+                var test = new FormData();
+
+                if (files.length <= 0) {
+                    alert('please select photo to upload');
+                    return;
+                }
+
+                $('#progress-main').show();
+
+                test.append("UserName", $('#userid').html());
+                test.append("SchemaName", $('#SchemaName').val());
+                test.append("Description", $('#Description').val());
+                test.append("SchemaType", $('#SchemaType').val());
+                test.append("AccessType", $('#AccessType').val());
+                test.append("GroupName", $('#GroupName option:selected').text());
+
+                for (var i = 0; i < files.length; i++) {
+                    test.append(files[i].name, files[i]);
+                }
+                $.ajax({
+                    url: "/handlers/importschema.ashx",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: test,
+                    // dataType: "json",
+                    success: function (result) {
+                        alert('Upload sukses :'+result.Result);
+                        //$('#progress-main').children('h3').html('Upload sukses.');
+                        $('#progress-main').hide();
+                    },
+                    error: function (err) {
+                        uploadSucceed = false;
+                        ErrMsg += err.Comment;
+                        alert('upload gagal');
+                        //$('#progress-main').children('h3').html('Upload gagal.');
+                        $('#progress-main').hide();
+                    }
+                });
+
+
+
+            });
+
+
+        });
+
+    });
+
+    </script>
+
+</div>

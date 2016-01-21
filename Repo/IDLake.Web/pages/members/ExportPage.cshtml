@@ -1,0 +1,123 @@
+﻿@{
+    Page.Title = "IDLake - Export Data";
+    Layout = "/pages/shared/_main.cshtml";
+}
+
+<div data-role="page" id="exportpage">
+    <div data-role="header">
+        <div style="display:none;" id="userid2">@System.Web.HttpContext.Current.User.Identity.Name</div>
+        <a href="~/pages/members/migration/" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-l">Back</a>
+
+     
+        <h1>Indonesia Data Lake - Export Data</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Silakan pilih schema data yang ingin di export dan kemudian pilih format filenya.</h3>
+        <div>
+            <div class="ui-field-contain">
+                <label for="SchemaName" class="select">Pilih Schema:</label>
+                <select name="SchemaName" id="SchemaName" data-native-menu="true"></select>
+            </div>
+            <div class="ui-field-contain">
+                <span id="deskripsi"></span>
+            </div>
+            <div class="ui-field-contain">
+                <label for="FormatFile" class="select">Format Data:</label>
+                <select name="FormatFile" id="FormatFile" data-native-menu="false">
+                    <option selected value="csv">Delimited File (CSV)</option>
+                    <option value="json">Json File (.json)</option>
+                    <option value="xml">XML File (.xml)</option>
+                </select>
+            </div>
+            <div id="progress-main2" style="display:none;">
+                <h3>Export data sedang di proses, harap menunggu.</h3>
+                <img id="ImgProgress" alt="loading.." src="~/styles/images/loading.gif" />
+            </div>
+            <div style="display:none;" id="DownloadDiv">
+                <a class="ui-btn" data-ajax="false" href="#" id="DownloadLink">Download Disini</a>
+            </div>
+            <div class="ui-field-contain">
+                <button id="btnExport" class="ui-btn">Export Data</button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+            var schemas2;
+            // Declare a proxy to reference the custom Hub name.
+
+            var WebDataHub = $.connection.WebHub;
+
+            // Start the connection.
+
+            $.connection.hub.start().done(function () {
+
+                var username = $('#userid2').html();
+                WebDataHub.server.GetSchemas(username).done(function (data) {
+                    schemas2 = data;
+                    var options = $("#SchemaName");
+                    $(data).each(function (index, result) {
+                        options.append($("<option />").val(result.Id).text(result.SchemaName));
+                    });
+                });
+
+                $("#SchemaName").change(function () {
+                    var selId = $(this).val();
+                    $(schemas2).each(function (index, result) {
+                        if (result.Id == selId) {
+                            $('#deskripsi').html(result.Description);
+                        }
+                    });
+                }).change();
+
+
+
+                $('#btnExport').click(function () {
+
+                    var SchemaId = $('#SchemaName').val();
+                    var SchemaType = -1;
+                    $(schemas2).each(function (index, result) {
+                        if (result.Id == SchemaId) {
+                            SchemaType = result.SchemaType;
+                        }
+                    });
+
+                    $('#progress-main2').show();
+
+                    var UserName =  $('#userid2').html();
+                    var SchemaName =  $('#SchemaName option:selected').text();
+                    WebDataHub.server.ExportData(SchemaId, UserName, $('#FormatFile').val()).done(function (data) {
+                        if (data.Result) {
+                            //alert('Upload sukses :' + data.Result);
+                            $('#DownloadDiv').show();
+                            $('#DownloadLink').attr("href", data.Params[0]);
+                            $('#progress-main2').hide();
+                        } else {
+                            alert('upload gagal');
+                            //$('#progress-main').children('h3').html('Upload gagal.');
+                            $('#progress-main2').hide();
+                        }
+                    });
+
+                });
+
+
+            });
+
+        });
+
+    </script>
+
+</div>
+    </div>

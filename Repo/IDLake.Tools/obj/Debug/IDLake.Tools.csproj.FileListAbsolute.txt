@@ -1,0 +1,12 @@
+E:\Workspace\IDLake\Repo\IDLake.Tools\bin\Debug\IDLake.Tools.dll.config
+E:\Workspace\IDLake\Repo\IDLake.Tools\bin\Debug\IDLake.Tools.dll
+E:\Workspace\IDLake\Repo\IDLake.Tools\bin\Debug\IDLake.Tools.pdb
+E:\Workspace\IDLake\Repo\IDLake.Tools\obj\Debug\IDLake.Tools.csprojResolveAssemblyReference.cache
+E:\Workspace\IDLake\Repo\IDLake.Tools\obj\Debug\IDLake.Tools.dll
+E:\Workspace\IDLake\Repo\IDLake.Tools\obj\Debug\IDLake.Tools.pdb
+F:\Experiment\IDLAKE\Repo\IDLake.Tools\bin\Debug\IDLake.Tools.dll.config
+F:\Experiment\IDLAKE\Repo\IDLake.Tools\bin\Debug\IDLake.Tools.dll
+F:\Experiment\IDLAKE\Repo\IDLake.Tools\bin\Debug\IDLake.Tools.pdb
+F:\Experiment\IDLAKE\Repo\IDLake.Tools\obj\Debug\IDLake.Tools.csprojResolveAssemblyReference.cache
+F:\Experiment\IDLAKE\Repo\IDLake.Tools\obj\Debug\IDLake.Tools.dll
+F:\Experiment\IDLAKE\Repo\IDLake.Tools\obj\Debug\IDLake.Tools.pdb

@@ -1,0 +1,100 @@
+﻿@{
+    Page.Title = "IDLake - Register User";
+    Layout = "/pages/shared/_main_anonymous.cshtml";
+}
+
+<div data-role="page" id="pageone">
+    <div data-role="header">
+        <h1>Indonesia Data Lake - Register</h1>
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <div id="popup" data-role="popup" class="ui-content" style="max-width:280px">
+            <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-alert ui-btn-icon-notext ui-btn-right">Close</a>
+            <p></p>
+        </div>
+        <p>Silakan isi form registrasi di bawah ini.</p>
+        <div>
+            <div class="ui-field-contain">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username">
+            </div>
+            <div class="ui-field-contain">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <div class="ui-field-contain">
+                <label for="password2">Re-type Password:</label>
+                <input type="password" name="password2" id="password2">
+            </div>
+            <div class="ui-field-contain">
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email">
+            </div>
+            <div class="ui-field-contain">
+                <button id="btnCreate" class="ui-btn">Create</button>
+                <button id="btnClear" class="ui-btn">Clear</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div data-role="footer">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+
+        $(function () {
+
+            // Declare a proxy to reference the custom Hub name.
+
+            var WebDataHub = $.connection.WebHub;
+
+            // Create a function that the hub can call to broadcast messages.
+
+            WebDataHub.client.Notify = function (hasil) {
+                alert(hasil);
+                //$('#alertdiv').empty();
+                //$('#alertdiv').append('<p>' + hasil + '</p>');
+
+            };
+
+            // Start the connection.
+
+            $.connection.hub.start().done(function () {
+
+                $('#btnCreate').click(function () {
+                    if ($('#password').val() != $('#password2').val()) {
+                        alert("password don't match");
+                        return;
+                    }
+                    WebDataHub.server.CreateUser($('#username').val(), $('#password').val(), $('#email').val()).done(
+                        function (e) {
+                            if (e.Result) {
+                                window.location = '/pages/publik/login/';
+                            } else {
+                                //alert(e.Comment);
+                                $('#popup').children('p').empty();
+                                $('#popup').children('p').html(e.Comment);
+                                $('#popup').popup("open");
+                            }
+                    });
+
+                });
+
+                $('#btnClear').click(function () {
+                    $('#username').val('');
+                    $('#password').val('');
+                    $('#password2').val('');
+                    $('#email').val('');
+                });
+
+            });
+
+        });
+
+</script>

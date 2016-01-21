@@ -1,0 +1,47 @@
+﻿@{
+    Page.Title = "IDLake - Welcome";
+    Layout = "/pages/shared/_main.cshtml";
+}
+<div data-role="page" id="mainpage">
+    <div data-role="header">
+        
+        <h1>Indonesia Data Lake - Selamat Datang</h1>
+        <a href="~/pages/members/search/" class="ui-btn-right ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Selamat datang, silakan pilih menu dibawah ini.</h3>
+        <div data-role="collapsibleset" data-theme="a" data-content-theme="a" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <div data-role="collapsible">
+                <h3>Manajemen Data</h3>
+                <a href="~/pages/members/SelectSchema/" class="ui-btn" data-transition="flip">Buat Schema Data Baru</a>
+                <a href="~/pages/members/Migration/" class="ui-btn" data-transition="flip">Migrasi Data</a>
+                <a href="~/pages/members/DataGallery/?tipe=api" class="ui-btn" data-transition="flip">Galleri Data (API/Docs)</a>
+                <a href="~/pages/members/DataGallery/?tipe=manage" class="ui-btn" data-transition="flip">Manajemen Data</a>
+            </div>
+            <div data-role="collapsible">
+                <h3>Laporan</h3>
+                <a href="~/pages/members/CreateReport/" class="ui-btn" data-transition="flip">Tambah Laporan Analisa</a>
+                <a href="~/pages/members/GalleryReport/" class="ui-btn" data-transition="flip">Galleri Laporan Analisa</a>
+                <a href="~/pages/members/Statistics/" class="ui-btn" data-transition="flip">Statistik Akses Data</a>
+                <a href="~/pages/members/Audit/" class="ui-btn">Audit Log</a>
+            </div>
+            <div data-role="collapsible">
+                <h3>Lainnya</h3>
+                <a href="~/pages/members/QueryEditor/" class="ui-btn" data-transition="flip">Query Editor</a>
+                <a href="~/pages/members/About/" class="ui-btn" data-transition="flip">Tentang Kami</a>
+            </div>
+           
+            
+            
+        </div>
+        
+    </div>
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+
+</div>

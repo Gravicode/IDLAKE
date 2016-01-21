@@ -1,0 +1,18 @@
+<Laporan_Barang_Hiltem>
+  <row>
+    <KTP>43.65467.675</KTP>
+    <Nama>Asep</Nama>
+    <Pengaduan>Mobil Avanza Dicuri</Pengaduan>
+    <JenisKendaraan>Mobil</JenisKendaraan>
+    <NoPolisi>B12343RF</NoPolisi>
+    <_id>2</_id>
+  </row>
+  <row>
+    <KTP>1.2.432.432</KTP>
+    <Nama>adhi</Nama>
+    <Pengaduan>motor harley hilang</Pengaduan>
+    <JenisKendaraan>motor</JenisKendaraan>
+    <NoPolisi>F2314432BF</NoPolisi>
+    <_id>1</_id>
+  </row>
+</Laporan_Barang_Hiltem>

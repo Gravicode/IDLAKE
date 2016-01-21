@@ -1,0 +1,40 @@
+﻿@{
+    Page.Title = "IDLake - Gallery Report";
+    Layout = "/pages/shared/_main.cshtml";
+}
+@using IDLake.Core;
+@using IDLake.Entities;
+@using IDLake.Web;
+
+<div data-role="page" id="mainpage">
+    <div data-role="header">
+        <a href="~/pages/members/front/" class="ui-btn ui-icon-home ui-btn-icon-left">Home</a>
+        <h1>Indonesia Data Lake - Gallery Report</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+    @{ 
+        var db = new SchemaDb();
+        var datas = from c in db.GetAllData<Laporan>()
+                    orderby c.nama
+                    select c;
+    }
+    <div data-role="main" class="ui-content">
+
+        <h3>Selamat datang, silakan pilih report dibawah ini.</h3>
+        <ul data-role="listview">
+            <li data-role="list-divider">Laporan Grafik</li>
+            @foreach (var item in datas)
+            {
+                <li><a data-rel="external" href="@item.url">@item.nama</a></li>
+            }
+           
+        </ul>
+
+    </div>
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+
+</div>

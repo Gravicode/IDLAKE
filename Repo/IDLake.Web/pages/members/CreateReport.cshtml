@@ -1,0 +1,94 @@
+﻿@{
+    Page.Title = "IDLake - Welcome";
+    Layout = "/pages/shared/_main_anonymous.cshtml";
+}
+
+<div>
+    <div data-role="page" id="CreateReport">
+        <div data-role="header">
+
+            <a href="~/pages/members/front/" data-rel="back" class="ui-btn ui-icon-home ui-btn-icon-left">Home</a>
+            <h1>Indonesia Data Lake - Create Report</h1>
+            <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+        </div>
+
+        <div data-role="main" class="ui-content">
+            <div id="popup" data-role="popup" class="ui-content" style="max-width:280px">
+                <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-alert ui-btn-icon-notext ui-btn-right">Close</a>
+                <p></p>
+            </div>
+            <p>Silakan isi form registrasi di bawah ini.</p>
+            <div>
+                <div class="ui-field-contain">
+                    <label for="username">Nama Laporan:</label>
+                    <input type="text" name="nama" id="nama">
+                </div>
+                <div class="ui-field-contain">
+                    <label for="password">URL:</label>
+                    <input type="text" name="url" id="url">
+                </div>
+                <div class="ui-field-contain">
+                    <label for="password2">Keterangan:</label>
+                    <input type="text" name="keterangan" id="keterangan">
+                </div>
+
+                <div class="ui-field-contain">
+                    <button id="btnSave" class="ui-btn">Save</button>
+                    <button id="btnClear" class="ui-btn">Clear</button>
+                </div>
+            </div>
+
+        </div>
+        <div data-role="footer" data-fullscreen="true" data-position="fixed">
+            <h1>Copyright (C) Gravicode</h1>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            // Declare a proxy to reference the custom Hub name.
+
+            var WebDataHub = $.connection.WebHub;
+
+            // Create a function that the hub can call to broadcast messages.
+
+            WebDataHub.client.Notify = function (hasil) {
+                alert(hasil);
+                //$('#alertdiv').empty();
+                //$('#alertdiv').append('<p>' + hasil + '</p>');
+
+            };
+
+            // Start the connection.
+
+            $.connection.hub.start().done(function () {
+                $('#btnSave').click(function () {
+                    WebDataHub.server.SaveLapor($('#nama').val(), $('#url').val(), $('#keterangan').val()).done(
+                    function (e) {
+                        if (e.Result) {
+                            window.location = '/pages/members/Front/';
+                        } else {
+                            //alert(e.Comment);
+                            $('#popup').children('p').empty();
+                            $('#popup').children('p').html(e.Comment);
+                            $('#popup').popup("open");
+                        }
+                    });
+
+                });
+
+                $('#btnClear').click(function () {
+                    $('#nama').val('');
+                    $('#url').val('');
+                    $('#keterangan').val('');
+
+                });
+
+            });
+        });
+
+    </script>
+</div>

@@ -1,0 +1,96 @@
+﻿@{
+    Page.Title = "IDLake - Manage Data";
+    Layout = "/pages/shared/_main.cshtml";
+}
+@using IDLake.Core;
+@using IDLake.Entities;
+@using System.Configuration;
+@using System.Threading.Tasks;
+@using System.Dynamic;
+@using IDLake.Web;
+@using Microsoft.AspNet.SignalR;
+@using Microsoft.AspNet.SignalR.Hubs;
+
+<div data-role="page" id="mainpage">
+    @{
+        var userid = System.Web.HttpContext.Current.User.Identity.Name;
+        var SchemaId = int.Parse(Request.QueryString["schemaid"]);
+        var db = new IDLake.Core.SchemaDb();
+        var selData = (from c in db.GetAllData<IDLake.Entities.SchemaEntity>()
+                       where c.Id == SchemaId
+                       orderby c.GroupName ascending
+                       select c).SingleOrDefault();
+    }
+    <div data-role="header">
+        <div style="display:none;" id="userid">@System.Web.HttpContext.Current.User.Identity.Name</div>
+        <a href="~/pages/members/datagallery/?tipe=manage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-l">Back</a>
+
+        <h1>Indonesia Data Lake - Manage Data @selData.SchemaName</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Silakan pilih manipulasi data yang diinginkan.</h3>
+
+        <ul id="datalist" data-role="listview">
+            <li data-role="list-divider">Menambah Data</li>
+            <li><a href="~/pages/members/createdata/?schemaid=@selData.Id">Tambah Data</a></li>
+            <li data-role="list-divider">Mengubah/Menghapus Data</li>
+
+        </ul>
+   
+    </div>
+
+
+
+
+
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+    <script type="text/javascript">
+
+    $(function () {
+
+        // Declare a proxy to reference the custom Hub name.
+
+        var WebDataHub = $.connection.WebHub;
+
+        // Create a function that the hub can call to broadcast messages.
+
+        WebDataHub.client.Notify = function (hasil) {
+            alert(hasil);
+            //$('#alertdiv').empty();
+            //$('#alertdiv').append('<p>' + hasil + '</p>');
+
+        };
+
+        // Start the connection.
+
+        $.connection.hub.start().done(function () {
+
+            WebDataHub.server.GetDataBySchema(@selData.Id).done(function (data) {
+
+                //var list = $("#datalist");
+                $(data).each(function (index, result) {
+                    $('#datalist').append($('<li/>', {    //here appending `<li>`
+                        
+                    }).append($('<a/>', {    //here appending `<a>` into `<li>`
+                        'href': '/pages/members/editdata/?itemid='+result._id+'&schemaid='+@selData.Id,
+                        'data-transition': 'slide',
+                        'text': 'Edit Data (' + result._id+')'
+                    })));
+
+                    
+                });
+                $('#datalist').listview('refresh');
+            });
+
+        });
+
+    });
+
+    </script>
+</div>

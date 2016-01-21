@@ -1,0 +1,178 @@
+﻿@{
+    Page.Title = "IDLake - Manage Data";
+    Layout = "/pages/shared/_main.cshtml";
+}
+@using IDLake.Core;
+@using IDLake.Entities;
+@using System.Configuration;
+@using System.Threading.Tasks;
+@using System.Dynamic;
+
+<div data-role="page" id="createdata">
+    @{
+        var userid = System.Web.HttpContext.Current.User.Identity.Name;
+        var SchemaId = int.Parse(Request.QueryString["schemaid"]);
+        var ItemId = Int64.Parse(Request.QueryString["itemid"]);
+
+        var db = new IDLake.Core.SchemaDb();
+        var selData = (from c in db.GetAllData<IDLake.Entities.SchemaEntity>()
+                       where c.Id == SchemaId
+                       orderby c.GroupName ascending
+                       select c).SingleOrDefault();
+        IDataContext dx = null;
+        var DBName = SchemaDb.GetDbName(userid);
+        if (selData.SchemaType == SchemaTypes.StreamData) {
+            dx = new InMemoryDb(DBName, db);
+        } else if (selData.SchemaType == SchemaTypes.RelationalData) {
+            dx = new DocumentDb(DBName, db);
+        }
+        else
+        {
+            dx = new ColumnarDb(DBName, db,userid);
+        }
+        dynamic tsk = Task.Run<dynamic>(async () =>
+        {
+            var item = await dx.GetDataById(ItemId, selData.SchemaName);
+            return item;
+        } ).Result;
+        
+        //tsk.Start();
+        //tsk.Wait();
+        IDictionary<String, Object> selItem = null;
+        if(tsk is ExpandoObject)
+        {
+            selItem = tsk as IDictionary<String, Object>;
+        }
+    }
+    <div data-role="header">
+        <div style="display:none;" id="userid">@System.Web.HttpContext.Current.User.Identity.Name</div>
+        <a href="#" data-rel="back" class="ui-btn ui-icon-back ui-btn-icon-left">Back</a>
+        <h1>Indonesia Data Lake - Tambah Data @selData.SchemaName</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+    <div data-role="main" class="ui-content">
+
+        <h3>Silakan lengkapi isian form ini.</h3>
+        <div id="form-isian">
+
+            @foreach (var field in selData.Fields)
+            {
+                <div class="ui-field-contain">
+                    <label for="@field.Value.Name">@field.Value.Name</label>
+                    @{
+                        if (field.Value.NativeType == typeof(string))
+                        {
+                            <input type="text" name="@field.Value.Name" id="@field.Value.Name" value='@selItem[field.Value.Name]' >
+                        }
+                        else if (field.Value.NativeType == typeof(double))
+                        {
+                            <input type="number" name="@field.Value.Name" id="@field.Value.Name" value='@selItem[field.Value.Name]'>
+                        }
+                        else
+                            if (field.Value.NativeType == typeof(int))
+                        {
+                            <input type="number" name="@field.Value.Name" id="@field.Value.Name" value='@selItem[field.Value.Name]'>
+                        }
+                        else
+                            if (field.Value.NativeType == typeof(DateTime))
+                        {
+                            <input type="datetime" name="@field.Value.Name" id="@field.Value.Name" value='@selItem[field.Value.Name]'>
+                        }
+                        else
+                            if (field.Value.NativeType == typeof(char))
+                        {
+                            <input type="text" maxlength="1" name="@field.Value.Name" id="@field.Value.Name" value='@selItem[field.Value.Name]'>
+                        }
+                        else
+                        {
+                            <input type="text" name="@field.Value.Name" id="@field.Value.Name" value='@selItem[field.Value.Name]'>
+                        }
+
+                    }
+                </div>
+                        }
+            <div id="ItemId" style="display:none;">@ItemId</div>
+            <div class="ui-field-contain">
+                <button id="btnSave" class="ui-btn">Simpan Data</button>
+                <button id="btnClear" class="ui-btn">Clear</button>
+                <button id="btnDelete" class="ui-btn">Delete Data</button>
+            </div>
+        </div>
+        <div id="progress-main" style="display:none;">
+            <h3>Schema sedang di proses, harap menunggu.</h3>
+            <img id="ImgProgress" alt="loading.." src="~/styles/images/loading.gif" />
+        </div>
+    </div>
+    <div style="display:none;" id="SchemaName">@selData.SchemaName</div>
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+    <script type="text/javascript">
+
+        // Declare a proxy to reference the custom Hub name.
+
+        var WebDataHub = $.connection.WebHub;
+
+        // Create a function that the hub can call to broadcast messages.
+
+        // Start the connection.
+        function confirmation() {
+            if (confirm("Are you sure you want to delete?"))
+                return true;
+            else return false;
+        }
+        $.connection.hub.start().done(function () {
+
+            var SchemaName = $('#SchemaName').html();
+            $('#btnClear').click(function () {
+                $("#form-isian input").each(function () {
+                    $(this).val('');
+                });
+            });
+            $('#btnDelete').click(function () {
+                var cf = confirmation();
+                if (cf) {
+                    WebDataHub.server.DeleteData($("#ItemId").html(), SchemaName).done(
+                        function (e) {
+                            if (e.Result) {
+                                alert('Data deleted.');
+                                window.location = '~/pages/members/front/';
+                            }
+                        });
+                    
+                }
+            });
+
+            $('#btnSave').click(function () {
+
+                var data = new Array();
+
+                var IDField = (function () {
+                    function IDField() {
+                    }
+                    return IDField;
+                })();
+
+
+                $("#form-isian input").each(function () {
+                    var node = new IDField();
+                    node.fieldname = $(this).attr('id');
+                    node.fieldvalue = $(this).val();
+                    data.push(node);
+                });
+
+                //send to server
+                WebDataHub.server.UpdateData($("#ItemId").html(), data, SchemaName).done(
+                        function (e) {
+                            if (e.Result) {
+                                alert('data saved.');
+                            }
+                        });
+            });
+
+        });
+
+    </script>
+
+</div>
+

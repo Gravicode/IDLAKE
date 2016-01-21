@@ -1,0 +1,110 @@
+﻿@{
+    Page.Title = "IDLake - Query Editor";
+    Layout = "/pages/shared/_main.cshtml";
+}
+
+<div data-role="page" id="about">
+    <div data-role="header">
+
+        <a href="~/pages/members/front" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-l">Home</a>
+
+        <h1>IDLake - Query Editor</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div data-role="content">
+            <h3>Silakan Ketik Query anda dibawah ini.</h3>
+            <div class="ui-field-contain">
+                <textarea type="text" name="TxtQuery" id="TxtQuery" placeholder="from c in await db.GetDb(4) join d in await db.GetDb(5) on c.Daerah equals d.Kota select New.NewObject(Daerah: c.Daerah, Jenis : c.Jenis, Jenis_Kota: d.Jenis_Kota)"></textarea>
+            </div>
+            <div class="ui-field-contain">
+                <label for="TxtUrl">Generated Url:</label>
+                <input type="text" name="TxtUrl" readonly id="TxtUrl">
+            </div>
+            <div class="ui-field-contain">
+                <button id="btnExec" class="ui-btn">Execute</button>
+                <button id="btnClear" class="ui-btn">Clear</button>
+            </div>
+            <h4>Hasil:</h4>
+            <div data-role="content" id="TxtResult">
+
+            </div>
+            <div id="RefTabel" data-role="collapsible">
+                <h3>Daftar Referensi Tabel</h3>
+                @{
+                    var userid = System.Web.HttpContext.Current.User.Identity.Name;
+                    var db = new IDLake.Core.SchemaDb();
+                    var datas = from c in db.GetAllData<IDLake.Entities.SchemaEntity>()
+                                where c.CreatedBy == userid
+                                orderby c.GroupName ascending
+                                select c;
+                    int Counter = 0;
+                }
+                <table class="ui-responsive table-stroke" data-role="table" >
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Schema</th>
+                            <th>Alias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in datas)
+                        {
+                            Counter++;
+                            <tr>
+                                <td>@Counter</td>
+                                <td>@item.SchemaName</td>
+                                <td>@string.Format("db.GetDb({0})", item.Id)</td>
+                            </tr>
+
+
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        $('#btnExec').click(function () {
+            var qry = $('#TxtQuery').val();
+            if (qry != undefined && qry.length > 0) {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/rest/DataService.ashx?op=query&limit=5&qry=" + qry,
+                    success: function (data) {
+                        $('#TxtResult').empty();
+                        $('#TxtResult').append(JSON.stringify(data));
+                        $('#TxtUrl').val("/api/rest/DataService.ashx?op=query&limit=5&qry=" + qry);
+                    },
+                    error: function (e) {
+                        //var a = $.parseJSON(e.responseText);
+                        alert("Error - " + e);
+
+                    },
+                    dataType: "json"
+                });
+            }
+            else {
+                alert('Ketik dulu bos querynya..');
+            }
+
+        });
+        $('#btnClear').click(function () {
+            $('#TxtResult').empty();
+            $('#TxtQuery').val('');
+            $('#TxtUrl').val('');
+        });
+
+
+    });
+</script>
+
+

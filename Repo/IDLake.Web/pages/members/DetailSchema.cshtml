@@ -1,0 +1,123 @@
+﻿@{
+    Page.Title = "IDLake - Detail Schema";
+    Layout = "/pages/shared/_main.cshtml";
+}
+<div data-role="page" id="mainpage">
+    <div data-role="header">
+        @{
+            var IDSchema = int.Parse(Request.QueryString["fid"]);
+            var db = new IDLake.Core.SchemaDb();
+            var seldata = (from c in db.GetAllData<IDLake.Entities.SchemaEntity>()
+                           where c.Id == IDSchema
+                           select c).SingleOrDefault();
+            var SchemaName = seldata.SchemaName;
+        }
+        <a href="~/pages/members/datagallery/?tipe=api" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-carat-l">Back</a>
+
+        <h1>Indonesia Data Lake - Detail @SchemaName</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <div data-role="collapsible">
+            <h1>API Access</h1>
+
+            <div data-role="collapsible">
+                <h1>Baca</h1>
+                <p>Contoh Baca Data (GET) </p>
+                <p>
+                <a data-ajax="false" href="~/api/rest/DataService.ashx?schemaid=@seldata.Id&op=read&limit=5">http://sitename/api/rest/DataService.ashx?schemaid=@seldata.Id&op=read&limit=5</a></p>
+
+            </div>
+            <div data-role="collapsible">
+                <h1>Baca Dengan Filter</h1>
+                <p>Contoh Baca Data (GET) with Filter </p>
+                <p>
+                    <a data-ajax="false" href="~/api/rest/DataService.ashx?schemaid=@seldata.Id&op=filter&limit=5&filter=_id=1">http://sitename/api/rest/DataService.ashx?schemaid=@seldata.Id&op=filter&limit=5&filter=_id=1</a>
+                </p>
+            </div>
+            <div data-role="collapsible">
+                <h1>Baca Dengan Query</h1>
+                <p>Contoh Baca Data (GET) with Query </p>
+                <p>
+                    <a data-ajax="false" href="~/api/rest/DataService.ashx?op=query&limit=5&qry=from c in await db.GetDb(@seldata.Id) select c">http://sitename/api/rest/DataService.ashx?op=query&limit=5&qry=from c in await db.GetDb(@seldata.Id) select c</a>
+                </p>
+            </div>
+
+            <div data-role="collapsible">
+                <h1>Tulis</h1>
+                <p>Contoh Tulis Data (POST)</p>
+                <p>
+                    <b>Url:</b> <br />http://sitename/api/rest/DataService.ashx?schemaid=@seldata.Id&op=create
+                    <br />
+                    <b>Parameter:</b>
+                    <br />
+                    <b>data :</b>
+                    <br />
+                    @seldata.JsonStructure
+                </p>
+
+            </div>
+            <div data-role="collapsible">
+                <h1>Ubah</h1>
+                <p>Contoh Ubah Data (POST)</p>
+                <p>
+                    <b>Url:</b> <br />http://sitename/api/rest/DataService.ashx?schemaid=@seldata.Id&op=update
+                    <br />
+                    <b>Parameter:</b>
+                    <br />
+                    <b>data :</b>
+                    <br />
+                    @{ 
+                        var temp = IDLake.Core.SchemaConverter.JsonToExpando(seldata.JsonStructure);
+                        temp._id = 1;
+                        var updateStr = Newtonsoft.Json.JsonConvert.SerializeObject(temp);
+                    }
+                    @updateStr
+                </p>
+
+            </div>
+            <div data-role="collapsible">
+                <h1>Delete</h1>
+                <p>Contoh Delete Data (GET)</p>
+                <p>
+                    <b>Url:</b><br />http://sitename/api/rest/DataService.ashx?schemaid=@seldata.Id&op=delete&keyid=1
+                    <br />
+                    <b>Parameter:</b>
+                    <br />
+                    keyid adalah primary key
+                    
+                </p>
+
+            </div>
+        </div>
+    </div>
+    <div data-role="footer">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+
+</div>
+<div data-role="page" id="selectschema">
+    <div data-role="header">
+
+        <a href="#mainpage" class="ui-btn ui-icon-home ui-btn-icon-left">Home</a>
+        <h1>Indonesia Data Lake - Bikin Schema Baru</h1>
+        <a href="~/pages/members/search/" class="ui-btn ui-icon-search ui-btn-icon-left">Search</a>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <h3>Pilih cara untuk membuat schema.</h3>
+        <ul data-role="listview">
+            <li><a href="~/pages/members/FormDesigner/">Bikin Schema Dengan Form Designer</a></li>
+            <li><a href="~/pages/members/ImportSchema/">Bikin Schema Dengan Template File (CSV, JSON, XML)</a></li>
+        </ul>
+    </div>
+
+    <div data-role="footer" data-fullscreen="true" data-position="fixed">
+        <h1>Copyright (C) Gravicode</h1>
+    </div>
+
+
+</div>

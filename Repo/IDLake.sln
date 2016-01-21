@@ -1,0 +1,96 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDLake.Entities", "IDLake.Entities\IDLake.Entities.csproj", "{DEF93EB6-469F-4C75-8F56-E38B3EC5DF2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDLake.Core", "IDLake.Core\IDLake.Core.csproj", "{E4D0553C-4555-40A5-AA9E-1FA248D00EA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDLake.Test", "IDLake.Test\IDLake.Test.csproj", "{E4A2E8BD-BE15-451B-98AD-0AD03825D267}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "IDLake.Web(1)", "IDLake.Web\", "{CF03B7BC-0D34-4E95-A28B-C9ACB86E5E70}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		ProjectReferences = "{e4d0553c-4555-40a5-aa9e-1fa248d00ea8}|IDLake.Core.dll;{DEF93EB6-469F-4C75-8F56-E38B3EC5DF2A}|IDLake.Entities.dll;{4322f9fe-866a-4263-b7ba-2e36482a671b}|Gravicode.Transformer.dll;{C0E2209E-7A6C-4E30-9688-FE192CA64BA5}|IDLake.Tools.dll;{53c340ad-b463-49bc-8ed0-b6aed4cd6e51}|IDLake.DynamicQuery.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_2959"
+		Debug.AspNetCompiler.PhysicalPath = "IDLake.Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2959\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_2959"
+		Release.AspNetCompiler.PhysicalPath = "IDLake.Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2959\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "2959"
+		SlnRelativePath = "IDLake.Web\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gravicode.Transformer", "Gravicode.Transformer\Gravicode.Transformer.csproj", "{4322F9FE-866A-4263-B7BA-2E36482A671B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDLake.Tools", "IDLake.Tools\IDLake.Tools.csproj", "{C0E2209E-7A6C-4E30-9688-FE192CA64BA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{41EF8C95-D0B4-4F43-A945-6D2F2775A238}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{63027F85-9E87-49F9-998F-E69296E34DC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{A995B8EB-B21D-470B-BE69-BD88A8864840}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{18DEB4B3-1684-4EEC-B682-B83B9EE256B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDLake.DynamicQuery", "IDLake.DynamicQuery\IDLake.DynamicQuery.csproj", "{53C340AD-B463-49BC-8ED0-B6AED4CD6E51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DEF93EB6-469F-4C75-8F56-E38B3EC5DF2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEF93EB6-469F-4C75-8F56-E38B3EC5DF2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEF93EB6-469F-4C75-8F56-E38B3EC5DF2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEF93EB6-469F-4C75-8F56-E38B3EC5DF2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4D0553C-4555-40A5-AA9E-1FA248D00EA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4D0553C-4555-40A5-AA9E-1FA248D00EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4D0553C-4555-40A5-AA9E-1FA248D00EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4D0553C-4555-40A5-AA9E-1FA248D00EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4A2E8BD-BE15-451B-98AD-0AD03825D267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4A2E8BD-BE15-451B-98AD-0AD03825D267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4A2E8BD-BE15-451B-98AD-0AD03825D267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4A2E8BD-BE15-451B-98AD-0AD03825D267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF03B7BC-0D34-4E95-A28B-C9ACB86E5E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF03B7BC-0D34-4E95-A28B-C9ACB86E5E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF03B7BC-0D34-4E95-A28B-C9ACB86E5E70}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF03B7BC-0D34-4E95-A28B-C9ACB86E5E70}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{4322F9FE-866A-4263-B7BA-2E36482A671B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4322F9FE-866A-4263-B7BA-2E36482A671B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4322F9FE-866A-4263-B7BA-2E36482A671B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4322F9FE-866A-4263-B7BA-2E36482A671B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E2209E-7A6C-4E30-9688-FE192CA64BA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E2209E-7A6C-4E30-9688-FE192CA64BA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E2209E-7A6C-4E30-9688-FE192CA64BA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E2209E-7A6C-4E30-9688-FE192CA64BA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53C340AD-B463-49BC-8ED0-B6AED4CD6E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53C340AD-B463-49BC-8ED0-B6AED4CD6E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53C340AD-B463-49BC-8ED0-B6AED4CD6E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53C340AD-B463-49BC-8ED0-B6AED4CD6E51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DEF93EB6-469F-4C75-8F56-E38B3EC5DF2A} = {41EF8C95-D0B4-4F43-A945-6D2F2775A238}
+		{E4D0553C-4555-40A5-AA9E-1FA248D00EA8} = {41EF8C95-D0B4-4F43-A945-6D2F2775A238}
+		{E4A2E8BD-BE15-451B-98AD-0AD03825D267} = {18DEB4B3-1684-4EEC-B682-B83B9EE256B4}
+		{CF03B7BC-0D34-4E95-A28B-C9ACB86E5E70} = {A995B8EB-B21D-470B-BE69-BD88A8864840}
+		{4322F9FE-866A-4263-B7BA-2E36482A671B} = {41EF8C95-D0B4-4F43-A945-6D2F2775A238}
+		{C0E2209E-7A6C-4E30-9688-FE192CA64BA5} = {63027F85-9E87-49F9-998F-E69296E34DC4}
+		{53C340AD-B463-49BC-8ED0-B6AED4CD6E51} = {63027F85-9E87-49F9-998F-E69296E34DC4}
+	EndGlobalSection
+EndGlobal
